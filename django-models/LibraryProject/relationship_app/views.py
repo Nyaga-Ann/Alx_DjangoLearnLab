@@ -35,25 +35,35 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
-def role_check(role):
-    def check(user):
-        try:
-            return user.userprofile.role == role
-        except UserProfile.DoesNotExist:
-            return False
-    return user_passes_test(check)
+def is_admin(user):
+    try:
+        return user.userprofile.role == "Admin"
+    except UserProfile.DoesNotExist:
+        return False
+
+def is_librarian(user):
+    try:
+        return user.userprofile.role == "Librarian"
+    except UserProfile.DoesNotExist:
+        return False
+
+def is_member(user):
+    try:
+        return user.userprofile.role == "Member"
+    except UserProfile.DoesNotExist:
+        return False
 
 @login_required
-@role_check("Admin")
+@user_passes_test(is_admin)
 def admin_view(request):
     return render(request, "relationship_app/admin_view.html")
 
 @login_required
-@role_check("Librarian")
+@user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, "relationship_app/librarian_view.html")
 
 @login_required
-@role_check("Member")
+@user_passes_test(is_member)
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
