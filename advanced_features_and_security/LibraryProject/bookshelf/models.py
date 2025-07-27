@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
@@ -31,4 +33,17 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.username 
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    published_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view article"),
+            ("can_create", "Can create article"),
+            ("can_edit", "Can edit article"),
+            ("can_delete", "Can delete article"),
+        ]
