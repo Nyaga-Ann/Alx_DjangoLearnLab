@@ -1,0 +1,12 @@
+<h1>Add a Book</h1>
+<form method="post">
+    {% csrf_token %}
+    Title: <input type="text" name="title"><br>
+    Author:
+    <select name="author">
+        {% for author in authors %}
+        <option value="{{ author.id }}">{{ author.name }}</option>
+        {% endfor %}
+    </select><br>
+    <button type="submit">Add Book</button>
+</form>
