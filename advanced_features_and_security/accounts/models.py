@@ -1,7 +1,7 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db import models
+#from django.contrib.auth.models import AbstractUser, BaseUserManager
+#from django.db import models
 
-class CustomUserManager(BaseUserManager):
+#class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Email is required")
@@ -16,7 +16,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(username, email, password, **extra_fields)
 
-class CustomUser(AbstractUser):
+#class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to="profiles/", null=True, blank=True)
