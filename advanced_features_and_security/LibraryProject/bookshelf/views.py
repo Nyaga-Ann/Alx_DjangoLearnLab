@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Article, Book
-from .forms import BookSearchForm
+from .forms import BookSearchForm, ExampleForm
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def view_articles(request):
