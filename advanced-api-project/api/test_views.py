@@ -11,9 +11,10 @@ class BookAPITests(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.login(username='testuser', password='testpass')
 
         self.author = Author.objects.create(name="Author One")
-        self.book = Book.objects.create(
+        self.book = Book.objects.create(self.client.login(username='testuser', password='testpass')
             title="Test Book",
             publication_year=2020,
             author=self.author
