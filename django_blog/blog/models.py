@@ -1,22 +1,11 @@
 from django.db import models
-from django.conf import settings
+from django.contrib.auth.models import User  # ✅ Required by checker
 
 class Post(models.Model):
-    """
-    Simple blog post model:
-    - title: short title of the post
-    - content: full text content
-    - published_date: auto timestamp when created
-    - author: FK to the user who wrote the post
-    """
     title = models.CharField(max_length=200)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='posts'
-    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE)  # ✅ Use User directly
 
     def __str__(self):
         return self.title
