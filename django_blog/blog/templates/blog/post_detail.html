@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "blog/base.html" %}
 {% block content %}
   <h2>{{ object.title }}</h2>
   <p>{{ object.content }}</p>
-  <small>By {{ object.author }} on {{ object.published_date }}</small>
+  <small>by {{ object.author }} on {{ object.published_date }}</small>
 
   {% if user == object.author %}
     <p>
@@ -12,3 +12,4 @@
   {% endif %}
   <a href="{% url 'post-list' %}">Back to posts</a>
 {% endblock %}
+
