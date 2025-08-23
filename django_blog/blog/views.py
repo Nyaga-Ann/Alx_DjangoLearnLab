@@ -8,7 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .forms import PostForm, CommentForm
 
-from .forms import RegisterForm, ProfileForm, DetailView
+from .forms import RegisterForm, ProfileForm
+from django.views.generic import DetailView
 
 def register_view(request):
     """User sign up using extended UserCreationForm with email."""
