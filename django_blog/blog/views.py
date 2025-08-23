@@ -162,13 +162,15 @@ class SearchResultsView(ListView):
         return Post.objects.none()
 
 
-class TagPostListView(ListView):
+class PostByTagListView(ListView):
     model = Post
-    template_name = "blog/post_by_tag.html"
+    template_name = "blog/posts_by_tag.html"  # you can create this template
     context_object_name = "posts"
 
     def get_queryset(self):
+        # get the tag from the URL
         self.tag = get_object_or_404(Tag, slug=self.kwargs.get("tag_slug"))
+        # return posts with this tag
         return Post.objects.filter(tags__in=[self.tag])
 
     def get_context_data(self, **kwargs):
