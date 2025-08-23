@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     PostListView, PostDetailView,
     PostCreateView, PostUpdateView, PostDeleteView,
-    register_view, profile_view
+    register_view, profile_view, CommentUpdateView, CommentDeleteView
 )
 from django.contrib.auth import views as auth_views
 
@@ -13,6 +13,8 @@ urlpatterns = [
     path("post/new/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
+    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
 
     # auth
     path("login/", auth_views.LoginView.as_view(template_name="blog/login.html"), name="login"),
