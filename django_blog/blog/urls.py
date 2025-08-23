@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     PostListView, PostDetailView,
     PostCreateView, PostUpdateView, PostDeleteView,
-    register_view, profile_view,CommentCreateView, CommentUpdateView, CommentDeleteView, TagPostListView
+    register_view, profile_view,CommentCreateView, CommentUpdateView, CommentDeleteView, TagPostListView, SearchResultsView
 )
 from django.contrib.auth import views as auth_views
 
