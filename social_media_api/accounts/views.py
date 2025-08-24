@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.contrib.auth import get_user_model
+from .models import User as CustomUser
 
 User = get_user_model()
 
@@ -39,24 +40,29 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
-        target = get_object_or_404(User, pk=user_id)
+        target = get_object_or_404(CustomUser, pk=user_id)
         if target == request.user:
-            return Response({"detail": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "You cannot follow yourself."},
+                            status=status.HTTP_400_BAD_REQUEST)
         request.user.following.add(target)
-        return Response({"detail": f"You are now following {target.username}."}, status=status.HTTP_200_OK)
+        return Response({"detail": f"You are now following {target.username}."},
+                        status=status.HTTP_200_OK)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
-        target = get_object_or_404(User, pk=user_id)
+        target = get_object_or_404(CustomUser, pk=user_id)
         if target == request.user:
-            return Response({"detail": "You cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "You cannot unfollow yourself."},
+                            status=status.HTTP_400_BAD_REQUEST)
         request.user.following.remove(target)
-        return Response({"detail": f"You unfollowed {target.username}."}, status=status.HTTP_200_OK)
-
+        return Response({"detail": f"You unfollowed {target.username}."},
+                        status=status.HTTP_200_OK)
