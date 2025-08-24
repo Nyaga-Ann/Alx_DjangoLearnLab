@@ -50,21 +50,23 @@ class FeedView(generics.GenericAPIView):
 
         return Post.objects.filter(author_id__in=following_ids).order_by('-created_at')
 
- def post(self, request, pk):
-        # 👇 Use generics.get_object_or_404
-        post = generics.get_object_or_404(Post, pk=pk)
-        user = request.user
+ class LikePostView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-        if Like.objects.filter(post=post, user=user).exists():
+    def post(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)
+
+        # 👇 This will create if not exists, or return the existing Like
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+        if not created:
             return Response({"detail": "You already liked this post."}, status=400)
 
-        Like.objects.create(post=post, user=user)
-
         # create notification for the post author
-        if post.author != user:
+        if post.author != request.user:
             Notification.objects.create(
                 recipient=post.author,
-                actor=user,
+                actor=request.user,
                 verb="liked your post",
                 target=post,
             )
@@ -77,9 +79,8 @@ class UnlikePostView(APIView):
 
     def post(self, request, pk):
         post = generics.get_object_or_404(Post, pk=pk)
-        user = request.user
+        like = Like.objects.filter(post=post, user=request.user).first()
 
-        like = Like.objects.filter(post=post, user=user).first()
         if not like:
             return Response({"detail": "You haven't liked this post."}, status=400)
 
